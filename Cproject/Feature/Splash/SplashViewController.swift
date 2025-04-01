@@ -36,6 +36,16 @@ class SplashViewController: UIViewController {
             self?.appIcon.transform = CGAffineTransform(rotationAngle: rotationAngle)
             
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2){
+            let storyboard = UIStoryboard(name: "Home", bundle: nil)
+            let viewController = storyboard.instantiateInitialViewController()
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first(where: {$0.isKeyWindow}) {
+                window.rootViewController = viewController
+            }
+        }
     }
 
 }
