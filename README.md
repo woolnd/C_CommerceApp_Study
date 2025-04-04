@@ -7,7 +7,7 @@
 강의의 일부 내용을 바탕으로 커머스 앱을 직접 구현하며 공부한 내용을 기록하기 위해 만들어졌습니다.
 
 ## 📚 학습 목표
-- MVVM 패턴 이해 및 적용
+- MVVM 및 MVI 아키텍처 이해 및 적용
 - 네트워킹과 비동기 처리 실습
 - 실제 커머스 앱과 유사한 UI/UX 구성 연습
 - 재사용 가능한 컴포넌트 설계
@@ -15,7 +15,7 @@
 ## 🛠 사용 기술
 - Swift
 - UIKit
-- URLSession / Alamofire
+- URLSession
 - Auto Layout
 - Combine (Optional)
 
