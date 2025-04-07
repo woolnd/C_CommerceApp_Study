@@ -8,11 +8,14 @@
 import Foundation
 import Combine
 
-class HomeViewModel{
+final class HomeViewModel{
     enum Action{
         case loadData
+        case loadCoupon
         case getDataSuccess(HomeResponse)
         case getDataFailure(Error)
+        case getCouponSuccess(Bool)
+        case didTapCouponButton
     }
     
     final class State {
@@ -20,6 +23,9 @@ class HomeViewModel{
             var bannerViewModels: [HomeBannerCellViewModel]?
             var horizontalProductViewModels: [HomeProductCellViewModel]?
             var verticalProductViewModels: [HomeProductCellViewModel]?
+            var couponSate: [HomeCouponBtnViewModel]?
+            var separateLine1ViewModels: [HomeSeparatorLineCellViewModel] = [HomeSeparatorLineCellViewModel()]
+            var separateLine2ViewModels: [HomeSeparatorLineCellViewModel] = [HomeSeparatorLineCellViewModel()]
         }
         
         @Published var collectionViewModels: CollectionViewModels = CollectionViewModels()
@@ -27,18 +33,31 @@ class HomeViewModel{
     
     private(set) var state: State = State()
     private var loadDataTask: Task<Void, Never>?
+    private let couponKey: String = "CouponState"
     
     func process(_ action: Action){
         switch action {
         case .loadData:
             loadData()
+        case .loadCoupon:
+            loadCoupon()
         case let .getDataSuccess(response):
             transformResponse(response)
         case let .getDataFailure(error):
             print("network error: \(error)")
+        case let .getCouponSuccess(state):
+            Task { await transformCoupon(state) }
+        case .didTapCouponButton:
+            downloadCoupon()
         }
     }
     
+    deinit {
+        loadDataTask?.cancel()
+    }
+}
+
+extension HomeViewModel {
     private func loadData() {
         loadDataTask = Task{
             do {
@@ -50,8 +69,9 @@ class HomeViewModel{
         }
     }
     
-    deinit {
-        loadDataTask?.cancel()
+    private func loadCoupon() {
+        let couponState: Bool = UserDefaults.standard.bool(forKey: couponKey)
+        process(.getCouponSuccess(couponState))
     }
     
     private func transformResponse(_ response: HomeResponse){
@@ -81,5 +101,15 @@ class HomeViewModel{
         return product.map {
             HomeProductCellViewModel(imageUlrString: $0.imageUrl, title: $0.title, reasonDiscountString: $0.discount, originalPriceString: $0.originalPrice.moneyString, discountPriceString: $0.discountPrice.moneyString)
         }
+    }
+    
+    @MainActor
+    private func transformCoupon(_ couponState: Bool) async {
+        state.collectionViewModels.couponSate = [.init(state: couponState ? .disable : .enable)]
+    }
+    
+    private func downloadCoupon() {
+        UserDefaults.standard.set(true, forKey: couponKey)
+        process(.loadCoupon)
     }
 }
