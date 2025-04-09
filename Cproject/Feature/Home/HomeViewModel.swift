@@ -26,6 +26,7 @@ final class HomeViewModel{
             var couponSate: [HomeCouponBtnViewModel]?
             var separateLine1ViewModels: [HomeSeparatorLineCellViewModel] = [HomeSeparatorLineCellViewModel()]
             var separateLine2ViewModels: [HomeSeparatorLineCellViewModel] = [HomeSeparatorLineCellViewModel()]
+            var themeViewModels: (header: HomeThemeHeaderViewModel, items: [HomeThemeCellViewModel])?
         }
         
         @Published var collectionViewModels: CollectionViewModels = CollectionViewModels()
@@ -78,6 +79,7 @@ extension HomeViewModel {
         Task { await transformBanner(response) }
         Task{ await transformHorizontalProduct(response) }
         Task{ await transformVerticalProduct(response) }
+        Task{ await transformTheme(response) }
     }
     
     @MainActor
@@ -95,6 +97,15 @@ extension HomeViewModel {
     @MainActor
     private func transformVerticalProduct(_ response: HomeResponse) async {
         state.collectionViewModels.verticalProductViewModels = homeProductCellViewModel(response.verticalProducts)
+    }
+    
+    @MainActor
+    private func transformTheme(_ response: HomeResponse) async {
+        let items = response.themes.map({
+            HomeThemeCellViewModel(imageUrl: $0.imageUrl)
+        })
+        
+        state.collectionViewModels.themeViewModels = (HomeThemeHeaderViewModel(headerText: "테마관"), items)
     }
     
     private func homeProductCellViewModel(_ product: [Product]) -> [HomeProductCellViewModel] {
