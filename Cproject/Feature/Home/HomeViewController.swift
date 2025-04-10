@@ -27,6 +27,8 @@ final class HomeViewController: UIViewController {
     private enum Section: Int {
         case banner
         case horizontalProductItem
+        case categorySeparte
+        case categoryItem
         case separteLine1
         case couponBtn
         case verticalProductItem
@@ -49,7 +51,6 @@ final class HomeViewController: UIViewController {
             switch self?.currentSection[section] {
             case .banner:
                 return HomeBannerCell.bannerLayout()
-                
             case .horizontalProductItem:
                 return HomeProductCell.horizontalProdectItemLayout()
             case .couponBtn:
@@ -60,6 +61,10 @@ final class HomeViewController: UIViewController {
                 return HomeSeparatorLineCell.separatorLineLayout()
             case .theme:
                 return HomeThemeCell.themeLayout()
+            case .categoryItem:
+                return HomeCategoryCell.homeCategoryLayout()
+            case .categorySeparte:
+                return HomeCategorySeparatorLineCell.categorySeparatorLineLayout()
             case .none: return nil
             }
         }
@@ -85,10 +90,16 @@ final class HomeViewController: UIViewController {
                 return self?.bannerCell(collectionView, indexPath, viewModel)
             case .horizontalProductItem, .verticalProductItem:
                 return self?.productCell(collectionView, indexPath, viewModel)
+            case .categoryItem:
+                return self?.categoryCell(collectionView, indexPath, viewModel)
             case .couponBtn:
                 return self?.couponCell(collectionView, indexPath, viewModel)
-            case .separteLine1, .separteLine2:
+            case .separteLine1:
                 return self?.separteCell(collectionView, indexPath, viewModel)
+            case .separteLine2:
+                return self?.separte2Cell(collectionView, indexPath, viewModel)
+            case .categorySeparte:
+                return self?.categorySeparteCell(collectionView, indexPath, viewModel)
             case .theme:
                 return self?.themeCell(collectionView, indexPath, viewModel)
             case .none:
@@ -117,10 +128,22 @@ final class HomeViewController: UIViewController {
         if let horizontalProductViewModels = viewModel.state.collectionViewModels.horizontalProductViewModels{
             snapshot.appendSections([.horizontalProductItem])
             snapshot.appendItems(horizontalProductViewModels, toSection: .horizontalProductItem)
+        }
+        
+        if let cateViewModels = viewModel.state.collectionViewModels.categoryViewModels {
+            
+            let categorylist = HomeCategoryCellViewModel.list
+            
+            snapshot.appendSections([.categorySeparte])
+            snapshot.appendItems(viewModel.state.collectionViewModels.categorySeparateLineViewModels, toSection: .categorySeparte)
+            
+            snapshot.appendSections([.categoryItem])
+            snapshot.appendItems(categorylist, toSection: .categoryItem)
             
             snapshot.appendSections([.separteLine1])
             snapshot.appendItems(viewModel.state.collectionViewModels.separateLine1ViewModels, toSection: .separteLine1)
         }
+        
          
         if let couponViewModels = viewModel.state.collectionViewModels.couponSate {
             
@@ -194,10 +217,49 @@ final class HomeViewController: UIViewController {
         return cell
     }
     
+    private func separte2Cell(_ collectionView: UICollectionView, _ indexPath: IndexPath, _ viewModel: AnyHashable) -> UICollectionViewCell {
+        guard let viewModel = viewModel as? HomeSeparatorLine2CellViewModel else {
+            return .init()
+        }
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeSeparatorLine2Cell.reusableId, for: indexPath) as? HomeSeparatorLine2Cell else {
+            return UICollectionViewCell()
+        }
+        
+        cell.configure(viewModel)
+        return cell
+    }
+    
+    private func categorySeparteCell(_ collectionView: UICollectionView, _ indexPath: IndexPath, _ viewModel: AnyHashable) -> UICollectionViewCell {
+        guard let viewModel = viewModel as? HomeCategorySeparatorLineCellViewModel else {
+            return .init()
+        }
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCategorySeparatorLineCell.reusableId, for: indexPath) as? HomeCategorySeparatorLineCell else {
+            return UICollectionViewCell()
+        }
+        
+        cell.configure(viewModel)
+        return cell
+    }
+    
     private func themeCell(_ collectionView: UICollectionView, _ indexPath: IndexPath, _ viewModel: AnyHashable) -> UICollectionViewCell {
        
         guard let viewModel = viewModel as? HomeThemeCellViewModel,
               let cell: HomeThemeCell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeThemeCell.resuableId, for: indexPath) as? HomeThemeCell else { return .init() }
+        
+        cell.configure(viewModel)
+        return cell
+    }
+    
+    private func categoryCell(_ collectionView: UICollectionView, _ indexPath: IndexPath, _ viewModel: AnyHashable) -> UICollectionViewCell {
+        guard let viewModel = viewModel as? HomeCategoryCellViewModel else {
+            return .init()
+        }
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCategoryCell.reusableId, for: indexPath) as? HomeCategoryCell else {
+            return UICollectionViewCell()
+        }
         
         cell.configure(viewModel)
         return cell

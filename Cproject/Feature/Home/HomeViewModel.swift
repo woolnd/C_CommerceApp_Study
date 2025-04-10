@@ -25,8 +25,10 @@ final class HomeViewModel{
             var verticalProductViewModels: [HomeProductCellViewModel]?
             var couponSate: [HomeCouponBtnViewModel]?
             var separateLine1ViewModels: [HomeSeparatorLineCellViewModel] = [HomeSeparatorLineCellViewModel()]
-            var separateLine2ViewModels: [HomeSeparatorLineCellViewModel] = [HomeSeparatorLineCellViewModel()]
+            var separateLine2ViewModels: [HomeSeparatorLine2CellViewModel] = [HomeSeparatorLine2CellViewModel()]
+            var categorySeparateLineViewModels: [HomeCategorySeparatorLineCellViewModel] = [HomeCategorySeparatorLineCellViewModel()]
             var themeViewModels: (header: HomeThemeHeaderViewModel, items: [HomeThemeCellViewModel])?
+            var categoryViewModels: [HomeCategoryCellViewModel]?
         }
         
         @Published var collectionViewModels: CollectionViewModels = CollectionViewModels()
@@ -80,6 +82,7 @@ extension HomeViewModel {
         Task{ await transformHorizontalProduct(response) }
         Task{ await transformVerticalProduct(response) }
         Task{ await transformTheme(response) }
+        Task { await transformCategory() } // ✅ 추가
     }
     
     @MainActor
@@ -97,6 +100,11 @@ extension HomeViewModel {
     @MainActor
     private func transformVerticalProduct(_ response: HomeResponse) async {
         state.collectionViewModels.verticalProductViewModels = homeProductCellViewModel(response.verticalProducts)
+    }
+    
+    @MainActor
+    private func transformCategory() async {
+        state.collectionViewModels.categoryViewModels = HomeCategoryCellViewModel.list
     }
     
     @MainActor
