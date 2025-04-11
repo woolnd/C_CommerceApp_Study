@@ -47,7 +47,8 @@ extension HomeCategoryCell {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .init(top: 20, leading: 0, bottom: 0, trailing: 0)
+        section.contentInsets = .init(top: 20, leading: 20, bottom: 0, trailing: 20)
+        section.interGroupSpacing = 20
         
         return section
         

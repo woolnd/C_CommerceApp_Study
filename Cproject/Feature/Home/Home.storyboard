@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="g4Y-es-UJ2">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="oJF-Tt-GT2">
-                                <rect key="frame" x="0.0" y="118" width="393" height="734"/>
+                                <rect key="frame" x="0.0" y="162" width="393" height="690"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="vXs-AM-ReB">
                                     <size key="itemSize" width="393" height="229"/>
@@ -171,7 +171,7 @@
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeSeparatorLineCell" id="ZuO-DK-13B" customClass="HomeSeparatorLineCell" customModule="Cproject" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="690" width="393" height="229"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="DZR-bn-Yff">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="DZR-bn-Yff">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="229"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
@@ -266,16 +266,42 @@
                             <constraint firstItem="oJF-Tt-GT2" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="mTJ-7d-tB3"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="DA7-XK-Tst">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="favorite_on" id="zk9-7y-nLL">
+                            <connections>
+                                <action selector="favoriteButtonAction:" destination="Y6W-OH-hqX" id="ySF-zi-ZTi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="oJF-Tt-GT2" id="7zb-6V-nog"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="138.1679389312977" y="-2.1126760563380285"/>
+            <point key="canvasLocation" x="2918.320610687023" y="-2.1126760563380285"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Igy-J5-Eeu">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="g4Y-es-UJ2" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mYy-x4-Khf">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="C3b-YB-KG0"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TMQ-0d-W1g" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1991.6030534351144" y="-2.1126760563380285"/>
         </scene>
     </scenes>
     <resources>
+        <image name="favorite_on" width="24" height="24"/>
         <namedColor name="bk">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
