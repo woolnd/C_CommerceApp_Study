@@ -15,6 +15,7 @@
 ## 🛠 사용 기술
 - Swift
 - UIKit
+- SwifUI
 - URLSession
 - Auto Layout
 - Combine (Optional)
