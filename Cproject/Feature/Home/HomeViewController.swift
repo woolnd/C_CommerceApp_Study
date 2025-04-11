@@ -264,6 +264,13 @@ final class HomeViewController: UIViewController {
         cell.configure(viewModel)
         return cell
     }
+
+    @IBAction func favoriteButtonAction(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Favorite", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "FavoriteViewController") as! FavoriteViewController
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 #Preview{
