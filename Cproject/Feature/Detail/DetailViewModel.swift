@@ -87,12 +87,10 @@ extension DetailViewModel {
 //    }
     private func loadData() {
         loadDataTask = Task {
-            defer {
-                process(.loading(false))
-            }
-
-            do {
+            await MainActor.run {
                 process(.loading(true))
+            }
+            do {
                 let db = Firestore.firestore()
                 let docRef = db.collection("ProductDetail").document("sample1")
 
@@ -104,6 +102,10 @@ extension DetailViewModel {
                 process(.getDataSucess(response))
             } catch {
                 process(.getDataFailure(error))
+            }
+            
+            await MainActor.run {
+                process(.loading(false))
             }
         }
     }
