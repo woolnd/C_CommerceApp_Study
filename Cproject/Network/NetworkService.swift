@@ -62,4 +62,16 @@ class NetworkService {
             throw NetworkError.decodeError
         }
     }
+    
+    func getProductDetailData() async throws -> ProductDetailResponse{
+        let url = try createdURL(withPath: "/JsonAPIFastCampusProductDetail/db")
+        let data = try await fetchData(from: url)
+        
+        do {
+            let decodeData = try JSONDecoder().decode(ProductDetailResponse.self, from: data)
+            return decodeData
+        } catch {
+            throw NetworkError.decodeError
+        }
+    }
 }
