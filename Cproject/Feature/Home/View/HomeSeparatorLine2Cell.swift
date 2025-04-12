@@ -15,7 +15,7 @@ final class HomeSeparatorLine2Cell: UICollectionViewCell {
     static let reusableId: String = "HomeSeparatorLine2Cell"
     
     func configure(_ viewModel: HomeSeparatorLine2CellViewModel){
-        contentView.backgroundColor = CPColor.gray1
+        contentView.backgroundColor = CPColor.UIKit.gray1
     }
 }
 
