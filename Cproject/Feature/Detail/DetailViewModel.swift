@@ -7,9 +7,11 @@
 
 import Foundation
 import FirebaseFirestore
+import Combine
 
 final class DetailViewModel: ObservableObject {
     struct State {
+        var isError: String?
         var isLoading: Bool = false
         var banners: DetailBannerViewModel?
         var rate: DetailRateViewModel?
@@ -33,6 +35,7 @@ final class DetailViewModel: ObservableObject {
     }
     
     @Published private(set) var state: State = State()
+    private(set) var showOptionViewController = PassthroughSubject<Void, Never>()
     private var loadDataTask: Task<Void, Never>?
     private var isFavorite: Bool = false
     private var needShowMore: Bool = true
@@ -43,7 +46,7 @@ final class DetailViewModel: ObservableObject {
         case .loadData:
             loadData()
         case let .loading(isLoading):
-            state.isLoading = isLoading
+            Task{ await toggleLoading(isLoading) }
         case let .getDataSucess(response):
             print(response)
             Task{
@@ -51,15 +54,13 @@ final class DetailViewModel: ObservableObject {
             }
             
         case let .getDataFailure(error):
-            print(error)
+            Task { await getDataError(error) }
         case .didTapChangeOption:
-            break
+            showOptionViewController.send()
         case .didTapMore:
-            needShowMore = false
-            state.more = needShowMore ? DetailMoreViewModel() : nil
+            Task{ await toggleMore () }
         case .didTapFavorite:
-            isFavorite.toggle()
-            state.purchase = DetailPurchaseViewModel(isFavorite: isFavorite)
+            Task{ await toggleFavorite() }
         case .didTapPurchase:
             break
         }
@@ -111,7 +112,25 @@ extension DetailViewModel {
     }
     
     @MainActor
+    private func toggleLoading(_ isLoading: Bool) async {
+        state.isLoading = isLoading
+    }
+    
+    @MainActor
+    private func toggleFavorite() async {
+        isFavorite.toggle()
+        state.purchase = DetailPurchaseViewModel(isFavorite: isFavorite)
+    }
+    
+    @MainActor
+    private func toggleMore() async {
+        needShowMore = false
+        state.more = needShowMore ? DetailMoreViewModel() : nil
+    }
+    
+    @MainActor
     private func transformProductDetailResponse(_ response: ProductDetailResponse) async {
+        state.isError = nil
         state.banners = DetailBannerViewModel(imageUrls: response.bannerImages)
         state.rate = DetailRateViewModel(rate: response.product.rate)
         state.title = response.product.name
@@ -120,5 +139,10 @@ extension DetailViewModel {
         state.mainImageUrls = response.detailImages
         state.more = needShowMore ? DetailMoreViewModel() : nil
         state.purchase = DetailPurchaseViewModel(isFavorite: isFavorite)
+    }
+    
+    @MainActor
+    private func getDataError(_ error: Error){
+        state.isError = "에러가 발생했습니다. \(error.localizedDescription)"
     }
 }
