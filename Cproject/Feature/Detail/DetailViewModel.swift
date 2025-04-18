@@ -35,7 +35,7 @@ final class DetailViewModel: ObservableObject {
     }
     
     @Published private(set) var state: State = State()
-    private(set) var showOptionViewController = PassthroughSubject<Void, Never>()
+    private(set) var showOptionViewController = PassthroughSubject<String?, Never>()
     private var loadDataTask: Task<Void, Never>?
     private var isFavorite: Bool = false
     private var needShowMore: Bool = true
@@ -56,7 +56,8 @@ final class DetailViewModel: ObservableObject {
         case let .getDataFailure(error):
             Task { await getDataError(error) }
         case .didTapChangeOption:
-            showOptionViewController.send()
+            let selectedOptionName = state.option?.name
+            showOptionViewController.send(selectedOptionName)
         case .didTapMore:
             Task{ await toggleMore () }
         case .didTapFavorite:

@@ -9,11 +9,30 @@ import SwiftUI
 
 struct OptionRootView: View {
     @ObservedObject var viewModel: OptionViewModel
+    
     var body: some View {
-        Text("옵션 화면")
+        VStack(spacing: 0) {
+            if viewModel.state.isLoading {
+                
+            } else {
+                optionList
+            }
+        }
+        .onAppear(){
+            viewModel.process(.loadData)
+        }
+        
+    }
+    
+    @ViewBuilder
+    var optionList: some View {
+        if let optionViewModel = viewModel.state.optionDetail{
+            OptionDetailView(viewModel: optionViewModel, tapOptionName: viewModel.state.currentOptionName ?? "파랑")
+        }
+
     }
 }
 
 #Preview {
-    OptionRootView(viewModel: OptionViewModel())
+    OptionRootView(viewModel: OptionViewModel(currentOptionName: "코랄"))
 }
