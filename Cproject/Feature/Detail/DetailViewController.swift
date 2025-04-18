@@ -37,9 +37,9 @@ class DetailViewController: UIViewController {
     
     private func bindViewModelAction() {
         viewModel.showOptionViewController.receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                let viewController = OptionViewController()
-                self?.navigationController?.pushViewController(viewController, animated: true)
+            .sink { [weak self] optionName in
+                let optionVC = OptionViewController(currentOptionName: optionName)
+                self?.navigationController?.pushViewController(optionVC, animated: true)
             }
             .store(in: &cancellables)
     }
