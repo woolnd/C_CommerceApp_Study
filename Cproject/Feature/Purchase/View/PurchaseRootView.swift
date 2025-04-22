@@ -8,11 +8,12 @@
 import UIKit
 
 final class PurchaseRootView: UIView {
-
+    
     private var scrollViewConstraints: [NSLayoutConstraint]?
     private var titleLabelConstraints: [NSLayoutConstraint]?
     private var purchaseItemStackViewConstraints: [NSLayoutConstraint]?
     private var purchaseButtonConstraints: [NSLayoutConstraint]?
+    var onPurchaseButtonTapped: (() -> Void)?
     
     private var scrollView: UIScrollView = {
         let scrollView: UIScrollView = UIScrollView()
@@ -53,6 +54,7 @@ final class PurchaseRootView: UIView {
         button.layer.backgroundColor = CPColor.UIKit.keyColorBlue.cgColor
         button.layer.cornerRadius = 5
         button.translatesAutoresizingMaskIntoConstraints = false
+        
         return button
     }()
     
@@ -124,6 +126,11 @@ final class PurchaseRootView: UIView {
     
     private func commonInit() {
         addSubView()
+        purchaseButton.addTarget(self, action: #selector(purchaseButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func purchaseButtonTapped() {
+        onPurchaseButtonTapped?()
     }
     
     private func addSubView() {
