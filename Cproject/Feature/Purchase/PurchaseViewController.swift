@@ -20,6 +20,12 @@ final class PurchaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        rootView.onPurchaseButtonTapped = { [weak self] in
+            self?.viewModel.process(.didTapPurchaseButton)
+        }
+        
+        
         bindViewModel()
         viewModel.process(.loadData)
     }
@@ -31,6 +37,15 @@ final class PurchaseViewController: UIViewController {
                 guard let viewModel = self?.viewModel.state.purchaseItems else { return }
                 
                 self?.rootView.setPurchaseItem(viewModel)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.showPaymentViewController
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                let paymentVC = PaymentViewController()
+                
+                self?.navigationController?.pushViewController(paymentVC, animated: true)
             }
             .store(in: &cancellables)
     }

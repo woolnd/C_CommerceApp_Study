@@ -5,6 +5,7 @@
 //  Created by wodnd on 4/19/25.
 //
 
+import Combine
 import Foundation
 
 final class PurchaseViewModel: ObservableObject {
@@ -18,6 +19,7 @@ final class PurchaseViewModel: ObservableObject {
     }
     
     @Published private(set) var state: State = State()
+    private(set) var showPaymentViewController = PassthroughSubject<Void, Never>()
     
     func process(_ action: Action){
         switch action {
@@ -46,6 +48,6 @@ extension PurchaseViewModel {
     
     @MainActor
     private func didTapPurchaseButton() async{
-        print("구매 버튼 눌림")
+        showPaymentViewController.send()
     }
 }
